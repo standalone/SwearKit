@@ -13,15 +13,15 @@ struct Completions<Value> {
 	let onRejected: (Error) -> ()
 	let queue: DispatchQueue
 	
-	func fulfill(_ value: Value) { self.queue.async { self.onFulfilled(value) } }
-	func reject(_ error: Error) { queue.async { self.onRejected(error) } }
+	func fulfill(_ value: Value) { self.queue.sync { self.onFulfilled(value) } }
+	func reject(_ error: Error) { self.queue.sync { self.onRejected(error) } }
 }
 
 struct Finally {
 	let onFinally: () -> ()
 	let queue: DispatchQueue
 	
-	func finally() { self.queue.async { self.onFinally() } }
+	func finally() { self.queue.sync { self.onFinally() } }
 }
 
 enum State<Value>: CustomStringConvertible { case pending, fulfilled(value: Value), rejected(error: Error)
@@ -56,18 +56,25 @@ extension DispatchQueue {
 
 public final class Promise<Value> {
 	private var state: State<Value> = .pending
-	private let serializer = DispatchQueue(label: "promise_lock_queue", qos: .userInitiated)
+	private let serializer: DispatchQueue
 	private var completions: [Completions<Value>] = []
 	private var finallies: [Finally] = []
+	private var completionsCalled = false
 	
-	public init() { }
+	public init() {
+		self.serializer = DispatchQueue(label: "promise_lock_queue", qos: .userInitiated)
+	}
 	
-	public init(value: Value) { self.state = .fulfilled(value: value) }
+	internal init(serializer: DispatchQueue?) {
+		self.serializer = serializer ?? DispatchQueue(label: "promise_lock_queue", qos: .userInitiated)
+	}
 	
-	public init(error: Error) { self.state = .rejected(error: error) }
+	internal convenience init(value: Value, serializer: DispatchQueue? = nil) { self.init(serializer: serializer); self.state = .fulfilled(value: value) }
 	
-	public convenience init(queue: DispatchQueue = .promiseQueue, work: @escaping (_ fulfill: @escaping (Value) -> (), _ reject: @escaping (Error) -> () ) throws -> ()) {
-		self.init()
+	internal convenience init(error: Error, serializer: DispatchQueue? = nil) { self.init(serializer: serializer); self.state = .rejected(error: error) }
+	
+	internal convenience init(queue: DispatchQueue = .promiseQueue, serializer: DispatchQueue? = nil, work: @escaping (_ fulfill: @escaping (Value) -> (), _ reject: @escaping (Error) -> () ) throws -> ()) {
+		self.init(serializer: serializer)
 		queue.async {
 			do {
 				try work(self.fulfill, self.reject)
@@ -78,7 +85,7 @@ public final class Promise<Value> {
 	}
 	
 	@discardableResult public func then<NewValue>(on queue: DispatchQueue = .promiseQueue, _ onFulfilled: @escaping (Value) throws -> Promise<NewValue>) -> Promise<NewValue> {
-		return Promise<NewValue>(work: { fulfill, reject in
+		return Promise<NewValue>(serializer: self.serializer, work: { fulfill, reject in
 			self.addCompletions(on: queue,
 				onFulfilled: { value in
 					do {
@@ -95,9 +102,9 @@ public final class Promise<Value> {
 	@discardableResult public func then<NewValue>(on queue: DispatchQueue = .promiseQueue, _ onFulfilled: @escaping (Value) throws -> NewValue) -> Promise<NewValue> {
 		return then(on: queue, { (value) -> Promise<NewValue> in
 			do {
-				return Promise<NewValue>(value: try onFulfilled(value))
+				return Promise<NewValue>(value: try onFulfilled(value), serializer: self.serializer)
 			} catch let error {
-				return Promise<NewValue>(error: error)
+				return Promise<NewValue>(error: error, serializer: self.serializer)
 			}
 		})
 	}
@@ -144,7 +151,7 @@ public final class Promise<Value> {
 	}
 	
 	private func updateState(_ state: State<Value>) {
-		self.serializer.sync {
+		self.serializer.async {
 			guard self.state.isPending else { return }
 			self.state = state
 			self.fireCompletions()
@@ -156,10 +163,17 @@ public final class Promise<Value> {
 		self.serializer.async { self.completions.append(completion) }
 		self.fireCompletions()
 	}
+
+	private func finalize() {
+		guard self.finallies.count > 0 else { return }
+		self.finallies.forEach { finally in finally.finally() }
+		self.finallies.removeAll()
+	}
 	
 	private func fireCompletions() {
 		self.serializer.async {
-			guard !self.state.isPending else { return }
+			guard !self.state.isPending && !self.completionsCalled else { return }
+			self.completionsCalled = true
 			self.completions.forEach { completion in
 				switch self.state {
 				case let .fulfilled(value):
@@ -171,9 +185,7 @@ public final class Promise<Value> {
 				}
 			}
 			self.completions.removeAll()
-			
-			self.finallies.forEach { finally in finally.finally() }
-			self.finallies.removeAll()
+			self.finalize()
 		}
 	}
 }
