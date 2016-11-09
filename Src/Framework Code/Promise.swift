@@ -8,53 +8,7 @@
 
 import Foundation
 
-struct Completions<Value> {
-	let onFulfilled: (Value) -> ()
-	let onRejected: (Error) -> ()
-	let queue: DispatchQueue
-	
-	func fulfill(_ value: Value) { self.queue.sync { self.onFulfilled(value) } }
-	func reject(_ error: Error) { self.queue.sync { self.onRejected(error) } }
-}
-
-struct Finally {
-	let onFinally: () -> ()
-	let queue: DispatchQueue
-	
-	func finally() { self.queue.sync { self.onFinally() } }
-}
-
-enum State<Value>: CustomStringConvertible { case pending, fulfilled(value: Value), rejected(error: Error)
-	var isPending: Bool {
-		if case .pending = self { return true }
-		return false
-	}
-	
-	var value: Value? {
-		if case let .fulfilled(value) = self { return value }
-		return nil
-	}
-	
-	var error: Error? {
-		if case let .rejected(error) = self { return error }
-		return nil
-	}
-	
-	var description: String {
-		switch self {
-		case .fulfilled(let value): return "Fulfilled (\(value))"
-		case .rejected(let error): return "Rejected (\(error))"
-		case .pending: return "Pending"
-		}
-	}
-}
-
-
-extension DispatchQueue {
-	static var promiseQueue: DispatchQueue { return DispatchQueue.global(qos: .userInitiated) }
-}
-
-public final class Promise<Value> {
+public final class Promise<Value>: CustomStringConvertible {
 	private var state: State<Value> = .pending
 	private let serializer: DispatchQueue
 	private var completions: [Completions<Value>] = []
@@ -150,7 +104,7 @@ public final class Promise<Value> {
 		return result
 	}
 	
-	private func updateState(_ state: State<Value>) {
+	internal func updateState(_ state: State<Value>) {
 		self.serializer.async {
 			guard self.state.isPending else { return }
 			self.state = state
@@ -188,4 +142,54 @@ public final class Promise<Value> {
 			self.finalize()
 		}
 	}
+	
+	
+	public var description: String {
+		switch self.state {
+		case .fulfilled(let value): return "Fulfilled (\(value))"
+		case .rejected(let error): return "Rejected (\(error))"
+		case .pending: return "Pending"
+		}
+	}
+
 }
+
+private struct Completions<Value> {
+	let onFulfilled: (Value) -> ()
+	let onRejected: (Error) -> ()
+	let queue: DispatchQueue
+	
+	func fulfill(_ value: Value) { self.queue.sync { self.onFulfilled(value) } }
+	func reject(_ error: Error) { self.queue.sync { self.onRejected(error) } }
+}
+
+private struct Finally {
+	let onFinally: () -> ()
+	let queue: DispatchQueue
+	
+	func finally() { self.queue.sync { self.onFinally() } }
+}
+
+internal enum State<Value> { case pending, fulfilled(value: Value), rejected(error: Error)
+	var isPending: Bool {
+		if case .pending = self { return true }
+		return false
+	}
+	
+	var value: Value? {
+		if case let .fulfilled(value) = self { return value }
+		return nil
+	}
+	
+	var error: Error? {
+		if case let .rejected(error) = self { return error }
+		return nil
+	}
+}
+
+
+extension DispatchQueue {
+	static var promiseQueue: DispatchQueue { return DispatchQueue.global(qos: .userInitiated) }
+}
+
+
