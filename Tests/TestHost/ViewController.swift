@@ -7,34 +7,13 @@
 //
 
 import UIKit
-import Plug
+import SwearKit
 
 class ViewController: UIViewController {
 	@IBOutlet var statusLabel: UILabel!
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
-		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ViewController.onlineStatusChanged), name: Plug.notifications.onlineStatusChanged, object: nil)
-		
-		self.onlineStatusChanged()
-		// Do any additional setup after loading the view, typically from a nib.
-	}
-	
-	func onlineStatusChanged() {
-		dispatch_async(dispatch_get_main_queue()) {
-			switch (Plug.connectionType) {
-			case .Offline: self.statusLabel.text = "Offline"
-			case .Wifi: self.statusLabel.text = "WiFi"
-			case .WAN: self.statusLabel.text = "WAN"
-			}
-		}
-	}
 
-	override func didReceiveMemoryWarning() {
-		super.didReceiveMemoryWarning()
-		// Dispose of any resources that can be recreated.
 	}
-
-
 }
 
