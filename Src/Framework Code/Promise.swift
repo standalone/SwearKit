@@ -48,7 +48,8 @@ public final class Promise<Value>: CustomStringConvertible {
 						reject(error)
 					}
 				},
-				onRejected: reject
+				onRejected: reject,
+				onCancelled: reject
 			)
 		})
 	}
@@ -63,11 +64,12 @@ public final class Promise<Value>: CustomStringConvertible {
 		})
 	}
 	
-	@discardableResult public func then(on queue: DispatchQueue = .promiseQueue, _ onFulfilled: @escaping (Value) -> (), _ onRejected: @escaping (Error) -> () = { _ in }) -> Promise<Value> {
+	@discardableResult internal func then(on queue: DispatchQueue = .promiseQueue, _ onFulfilled: @escaping (Value) -> (), _ onRejected: @escaping (Error) -> () = { _ in }, _ onCancelled: @escaping (Error) -> () = { _ in }) -> Promise<Value> {
 		return Promise<Value>(work: { fulfill, reject in
 			self.addCompletions( on: queue,
 			                     onFulfilled: { value in fulfill(value); onFulfilled(value) },
-			                     onRejected: { error in reject(error);  onRejected(error) }
+			                     onRejected: { error in reject(error);  onRejected(error) },
+								 onCancelled: { error in reject(error);  onCancelled(error) }
 			)
 		})
 	}
@@ -78,7 +80,11 @@ public final class Promise<Value>: CustomStringConvertible {
 	}
 	
 	@discardableResult public func `catch`(on queue: DispatchQueue = .promiseQueue, _ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
-		return self.then(on: queue, { _ in }, onRejected)
+		return self.then(on: queue, { _ in }, onRejected, { _ in })
+	}
+	
+	@discardableResult public func cancelled(on queue: DispatchQueue = .promiseQueue, _ onCancelled: @escaping (Error) -> ()) -> Promise<Value> {
+		return self.then(on: queue, { _ in }, { _ in }, onCancelled)
 	}
 	
 	public func reject(_ error: Error) { self.updateState(.rejected(error: error)) }
@@ -89,8 +95,10 @@ public final class Promise<Value>: CustomStringConvertible {
 		self.serializer.sync { result = self.state.isPending }
 		return result
 	}
+	
 	public var isFulfilled: Bool { return self.value != nil }
 	public var isRejected: Bool { return self.error != nil }
+	public var isCancelled: Bool { return self.error is PromiseCancelledError }
 	
 	public var value: Value? {
 		var result: Value?
@@ -112,8 +120,8 @@ public final class Promise<Value>: CustomStringConvertible {
 		}
 	}
 	
-	private func addCompletions(on queue: DispatchQueue, onFulfilled: @escaping (Value) -> (), onRejected: @escaping (Error) -> ()) {
-		let completion = Completions(onFulfilled: onFulfilled, onRejected: onRejected, queue: queue)
+	private func addCompletions(on queue: DispatchQueue, onFulfilled: @escaping (Value) -> (), onRejected: @escaping (Error) -> (), onCancelled: @escaping (Error) -> ()) {
+		let completion = Completions(onFulfilled: onFulfilled, onRejected: onRejected, onCancelled: onCancelled, queue: queue)
 		self.serializer.async { self.completions.append(completion) }
 		self.fireCompletions()
 	}
@@ -133,7 +141,11 @@ public final class Promise<Value>: CustomStringConvertible {
 				case let .fulfilled(value):
 					completion.fulfill(value)
 				case let .rejected(error):
-					completion.reject(error)
+					if let cancelError = error as? PromiseCancelledError {
+						completion.cancel(cancelError)
+					} else {
+						completion.reject(error)
+					}
 				default:
 					break
 				}
@@ -157,10 +169,12 @@ public final class Promise<Value>: CustomStringConvertible {
 private struct Completions<Value> {
 	let onFulfilled: (Value) -> ()
 	let onRejected: (Error) -> ()
+	let onCancelled: (Error) -> ()
 	let queue: DispatchQueue
 	
 	func fulfill(_ value: Value) { self.queue.sync { self.onFulfilled(value) } }
 	func reject(_ error: Error) { self.queue.sync { self.onRejected(error) } }
+	func cancel(_ error: Error) { self.queue.sync { self.onCancelled(error) } }
 }
 
 private struct Finally {
