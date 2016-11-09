@@ -28,7 +28,7 @@ public extension URLSession {
 		return promise
 	}
 	
-	public func get(queue: DispatchQueue = .main, url: URL) -> Promise<(URLResponse, Data)> {
+	public func getWithRequest(queue: DispatchQueue = .main, url: URL) -> Promise<(URLResponse, Data)> {
 		let promise = Promise<(URLResponse, Data)>()
 		
 		let task = self.dataTask(with: url) { data, response, error in

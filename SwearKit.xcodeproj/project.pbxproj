@@ -25,7 +25,6 @@
 		B504E69D1A896E82001B414B /* SwearKit_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B504E69C1A896E82001B414B /* SwearKit_Tests.swift */; };
 		B504E6A41A897017001B414B /* SwearKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = B504E6461A8968DC001B414B /* SwearKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B504E6A51A897087001B414B /* SwearKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B504E6461A8968DC001B414B /* SwearKit.framework */; };
-		B519F8871C498B36002C5A61 /* json_sample_1.json in Resources */ = {isa = PBXBuildFile; fileRef = B5F5EF871C497E1500284AF8 /* json_sample_1.json */; };
 		B54473251DD237C000590803 /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54473241DD237C000590803 /* Promise.swift */; };
 		B54473261DD237C000590803 /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = B54473241DD237C000590803 /* Promise.swift */; };
 		B57AEF441C59C1AE007611F0 /* sample_image.png in Resources */ = {isa = PBXBuildFile; fileRef = B57AEF431C59C1AE007611F0 /* sample_image.png */; };
@@ -38,7 +37,7 @@
 		B5EA1AD61DD2FEBB000E61F7 /* Promise+Cancel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5EA1AD41DD2FEBB000E61F7 /* Promise+Cancel.swift */; };
 		B5EA1ADB1DD3072B000E61F7 /* URLSession+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5EA1ADA1DD3072B000E61F7 /* URLSession+Promise.swift */; };
 		B5EA1ADC1DD3072B000E61F7 /* URLSession+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5EA1ADA1DD3072B000E61F7 /* URLSession+Promise.swift */; };
-		B5F5EF881C497E1500284AF8 /* json_sample_1.json in Resources */ = {isa = PBXBuildFile; fileRef = B5F5EF871C497E1500284AF8 /* json_sample_1.json */; };
+		B5EA1ADF1DD307D8000E61F7 /* SwaerKit+URLSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5EA1ADE1DD307D8000E61F7 /* SwaerKit+URLSessionTests.swift */; };
 		B5F7A9F01CA1524C00A53C48 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B5F7A9EE1CA1524C00A53C48 /* Default-568h@2x.png */; };
 /* End PBXBuildFile section */
 
@@ -105,7 +104,7 @@
 		B5BF7D8A1DCCB1C7009253D4 /* SwearKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwearKit.h; sourceTree = "<group>"; };
 		B5EA1AD41DD2FEBB000E61F7 /* Promise+Cancel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Cancel.swift"; path = "Src/Framework Code/Promise+Cancel.swift"; sourceTree = "<group>"; };
 		B5EA1ADA1DD3072B000E61F7 /* URLSession+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLSession+Promise.swift"; sourceTree = "<group>"; };
-		B5F5EF871C497E1500284AF8 /* json_sample_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = json_sample_1.json; path = TestHost/json_sample_1.json; sourceTree = "<group>"; };
+		B5EA1ADE1DD307D8000E61F7 /* SwaerKit+URLSessionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwaerKit+URLSessionTests.swift"; sourceTree = "<group>"; };
 		B5F7A9EF1CA1524C00A53C48 /* Base */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Base; path = "Base.lproj/Default-568h@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -173,7 +172,7 @@
 			children = (
 				B58D64871A899094005A0002 /* TestHost */,
 				B504E69C1A896E82001B414B /* SwearKit_Tests.swift */,
-				B5F5EF871C497E1500284AF8 /* json_sample_1.json */,
+				B5EA1ADE1DD307D8000E61F7 /* SwaerKit+URLSessionTests.swift */,
 				B504E69A1A896E82001B414B /* Supporting Files */,
 			);
 			name = "SwearKit Tests";
@@ -410,7 +409,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B58D64931A899094005A0002 /* Images.xcassets in Resources */,
-				B5F5EF881C497E1500284AF8 /* json_sample_1.json in Resources */,
 				B58D64911A899094005A0002 /* LaunchScreen.xib in Resources */,
 				B57AEF441C59C1AE007611F0 /* sample_image.png in Resources */,
 				B58D64921A899094005A0002 /* Main.storyboard in Resources */,
@@ -429,7 +427,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B519F8871C498B36002C5A61 /* json_sample_1.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -482,6 +479,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5EA1ADF1DD307D8000E61F7 /* SwaerKit+URLSessionTests.swift in Sources */,
 				B504E69D1A896E82001B414B /* SwearKit_Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

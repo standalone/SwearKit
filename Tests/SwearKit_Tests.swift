@@ -10,7 +10,7 @@ import UIKit
 import XCTest
 @testable import SwearKit
 
-class Plug_Tests: XCTestCase {
+class SwearKit_Tests: XCTestCase {
     
     override func setUp() {
         super.setUp()
