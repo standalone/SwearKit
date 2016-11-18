@@ -8,6 +8,8 @@
 
 import Foundation
 
+public typealias EmptyPromise = Promise<Void>
+
 public final class Promise<Value>: CustomStringConvertible {
 	private var state: State<Value> = .pending
 	private let serializer: DispatchQueue

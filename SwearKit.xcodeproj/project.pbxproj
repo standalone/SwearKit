@@ -33,6 +33,9 @@
 		B58D64921A899094005A0002 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B58D648B1A899094005A0002 /* Main.storyboard */; };
 		B58D64931A899094005A0002 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B58D648D1A899094005A0002 /* Images.xcassets */; };
 		B58D64951A899094005A0002 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58D648F1A899094005A0002 /* ViewController.swift */; };
+		B5D5EC4D1DDF1A85007A4145 /* Utility+Promises.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D5EC4C1DDF1A85007A4145 /* Utility+Promises.swift */; };
+		B5D5EC4E1DDF1A85007A4145 /* Utility+Promises.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D5EC4C1DDF1A85007A4145 /* Utility+Promises.swift */; };
+		B5D5EC501DDF1BAB007A4145 /* SwearKit+UtilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5D5EC4F1DDF1BAB007A4145 /* SwearKit+UtilityTests.swift */; };
 		B5EA1AD51DD2FEBB000E61F7 /* Promise+Cancel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5EA1AD41DD2FEBB000E61F7 /* Promise+Cancel.swift */; };
 		B5EA1AD61DD2FEBB000E61F7 /* Promise+Cancel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5EA1AD41DD2FEBB000E61F7 /* Promise+Cancel.swift */; };
 		B5EA1ADB1DD3072B000E61F7 /* URLSession+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5EA1ADA1DD3072B000E61F7 /* URLSession+Promise.swift */; };
@@ -102,6 +105,8 @@
 		B5BF7D841DCCB1AA009253D4 /* SwearKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwearKit.h; sourceTree = "<group>"; };
 		B5BF7D891DCCB1C7009253D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5BF7D8A1DCCB1C7009253D4 /* SwearKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwearKit.h; sourceTree = "<group>"; };
+		B5D5EC4C1DDF1A85007A4145 /* Utility+Promises.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Utility+Promises.swift"; sourceTree = "<group>"; };
+		B5D5EC4F1DDF1BAB007A4145 /* SwearKit+UtilityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwearKit+UtilityTests.swift"; sourceTree = "<group>"; };
 		B5EA1AD41DD2FEBB000E61F7 /* Promise+Cancel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Cancel.swift"; path = "Src/Framework Code/Promise+Cancel.swift"; sourceTree = "<group>"; };
 		B5EA1ADA1DD3072B000E61F7 /* URLSession+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URLSession+Promise.swift"; sourceTree = "<group>"; };
 		B5EA1ADE1DD307D8000E61F7 /* SwaerKit+URLSessionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwaerKit+URLSessionTests.swift"; sourceTree = "<group>"; };
@@ -173,6 +178,7 @@
 				B58D64871A899094005A0002 /* TestHost */,
 				B504E69C1A896E82001B414B /* SwearKit_Tests.swift */,
 				B5EA1ADE1DD307D8000E61F7 /* SwaerKit+URLSessionTests.swift */,
+				B5D5EC4F1DDF1BAB007A4145 /* SwearKit+UtilityTests.swift */,
 				B504E69A1A896E82001B414B /* Supporting Files */,
 			);
 			name = "SwearKit Tests";
@@ -243,6 +249,7 @@
 			isa = PBXGroup;
 			children = (
 				B5EA1ADA1DD3072B000E61F7 /* URLSession+Promise.swift */,
+				B5D5EC4C1DDF1A85007A4145 /* Utility+Promises.swift */,
 			);
 			name = Extensions;
 			path = "Src/Framework Code/Extensions";
@@ -471,6 +478,7 @@
 			files = (
 				B54473251DD237C000590803 /* Promise.swift in Sources */,
 				B5EA1ADB1DD3072B000E61F7 /* URLSession+Promise.swift in Sources */,
+				B5D5EC4D1DDF1A85007A4145 /* Utility+Promises.swift in Sources */,
 				B5EA1AD51DD2FEBB000E61F7 /* Promise+Cancel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -480,6 +488,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5EA1ADF1DD307D8000E61F7 /* SwaerKit+URLSessionTests.swift in Sources */,
+				B5D5EC501DDF1BAB007A4145 /* SwearKit+UtilityTests.swift in Sources */,
 				B504E69D1A896E82001B414B /* SwearKit_Tests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -490,6 +499,7 @@
 			files = (
 				B54473261DD237C000590803 /* Promise.swift in Sources */,
 				B5EA1ADC1DD3072B000E61F7 /* URLSession+Promise.swift in Sources */,
+				B5D5EC4E1DDF1A85007A4145 /* Utility+Promises.swift in Sources */,
 				B5EA1AD61DD2FEBB000E61F7 /* Promise+Cancel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
