@@ -12,7 +12,7 @@ public typealias EmptyPromise = Promise<Void>
 
 public final class Promise<Value>: CustomStringConvertible {
 	private var state: State<Value> = .pending
-	private let serializer: DispatchQueue
+	internal let serializer: DispatchQueue
 	private var completions: [Completions<Value>] = []
 	private var finallies: [Finally] = []
 	private var completionsCalled = false
@@ -122,7 +122,7 @@ public final class Promise<Value>: CustomStringConvertible {
 		}
 	}
 	
-	private func addCompletions(on queue: DispatchQueue, onFulfilled: @escaping (Value) -> (), onRejected: @escaping (Error) -> (), onCancelled: @escaping (Error) -> ()) {
+	internal func addCompletions(on queue: DispatchQueue, onFulfilled: @escaping (Value) -> (), onRejected: @escaping (Error) -> (), onCancelled: @escaping (Error) -> ()) {
 		let completion = Completions(onFulfilled: onFulfilled, onRejected: onRejected, onCancelled: onCancelled, queue: queue)
 		self.serializer.async { self.completions.append(completion) }
 		self.fireCompletions()
