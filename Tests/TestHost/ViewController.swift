@@ -33,7 +33,7 @@ class ViewController: UIViewController {
 				view.backgroundColor = UIColor.green
 				self.view.addSubview(view)
 				
-				return UIView.animate(withDuration: 0.3, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.0) {
+				return UIView.animate(duration: 0.3, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.0) {
 					view.center = CGPoint(x: 200, y: 200)
 				}
 			}).then(on: .main, { (Bool) -> EmptyPromise in

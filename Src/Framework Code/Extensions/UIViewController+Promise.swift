@@ -15,7 +15,7 @@ extension UINavigationController {
 	static let pushDuration = 0.2
 	static let popDuration = 0.35
 	
-	public func pop(animated: Bool = true) -> EmptyPromise {
+	public func popController(animated: Bool = true) -> EmptyPromise {
 		let promise = EmptyPromise()
 		
 		self.popViewController(animated: animated)
@@ -26,7 +26,7 @@ extension UINavigationController {
 		return promise
 	}
 
-	public func push(_ viewController: UIViewController, animated: Bool = true) -> EmptyPromise {
+	public func pushController(_ viewController: UIViewController, animated: Bool = true) -> EmptyPromise {
 		let promise = EmptyPromise()
 		
 		self.pushViewController(viewController, animated: animated)
@@ -39,7 +39,7 @@ extension UINavigationController {
 }
 
 extension UIViewController {
-	public func present(_ viewController: UIViewController, animated: Bool = true) -> EmptyPromise {
+	public func presentController(_ viewController: UIViewController, animated: Bool = true) -> EmptyPromise {
 		let promise = EmptyPromise()
 
 		self.present(viewController, animated: animated) {
@@ -49,7 +49,7 @@ extension UIViewController {
 		return promise
 	}
 	
-	public func dismiss(animated: Bool = true) -> EmptyPromise {
+	public func dismissController(animated: Bool = true) -> EmptyPromise {
 		let promise = EmptyPromise()
 		
 		self.dismiss(animated: animated) {
