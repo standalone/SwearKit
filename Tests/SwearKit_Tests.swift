@@ -22,7 +22,73 @@ class SwearKit_Tests: XCTestCase {
         super.tearDown()
     }
 	
+	func testPreFulfilled() {
+		let expect = self.expectation(description: "unfulfilled promise")
+		
+		self.fulfilledPromise().then { text in
+			expect.fulfill()
+		}
+		
+		waitForExpectations(timeout: 1.0) { error in
+			if let error = error {
+				print("not fulfilled, \(error)")
+			}
+		}
+	}
 	
+	func testPreRejected() {
+		let expect = self.expectation(description: "unrejected promise")
+		
+		self.brokenPromise().then { text in
+			XCTAssert(false, "Should not have been fulfilled")
+			}.catch { error in
+				expect.fulfill()
+		}
+		
+		waitForExpectations(timeout: 1.0) { error in
+			if let error = error {
+				print("not rejected, \(error)")
+			}
+		}
+	}
 	
+	func testPreCancelled() {
+		let expect = self.expectation(description: "uncancelled promise")
+		
+		self.cancelledPromise().then { text in
+			XCTAssert(false, "Should not have been fulfilled")
+		}.catch { error in
+			XCTAssert(false, "Should not have been rejected")
+		}.cancelled { error in
+			expect.fulfill()
+		}
+		
+		waitForExpectations(timeout: 1.0) { error in
+			if let error = error {
+				print("not cancelled, \(error)")
+			}
+		}
+	}
 	
+	func fulfilledPromise() -> Promise<String> {
+		let promise = Promise<String>()
+		
+		promise.fulfill("fulfilled!")
+		return promise
+	}
+
+	func brokenPromise() -> Promise<String> {
+		let promise = Promise<String>()
+		
+		promise.reject(NSError(domain: "Fail", code: 77, userInfo: nil))
+		return promise
+	}
+
+	func cancelledPromise() -> Promise<String> {
+		let promise = Promise<String>()
+		
+		promise.cancel(.other)
+		return promise
+	}
+
 }

@@ -123,9 +123,23 @@ public final class Promise<Value>: CustomStringConvertible {
 	}
 	
 	internal func addCompletions(on queue: DispatchQueue, onFulfilled: @escaping (Value) -> (), onRejected: @escaping (Error) -> (), onCancelled: @escaping (Error) -> ()) {
-		let completion = Completions(onFulfilled: onFulfilled, onRejected: onRejected, onCancelled: onCancelled, queue: queue)
-		self.serializer.async { self.completions.append(completion) }
-		self.fireCompletions()
+		if self.completionsCalled {
+			switch self.state {
+			case let .fulfilled(value):
+				onFulfilled(value)
+			case let .rejected(error):
+				if let cancelError = error as? PromiseCancelledError {
+					onCancelled(cancelError)
+				} else {
+					onRejected(error)
+				}
+			case .pending: break
+			}
+		} else {
+			let completion = Completions(onFulfilled: onFulfilled, onRejected: onRejected, onCancelled: onCancelled, queue: queue)
+			self.serializer.async { self.completions.append(completion) }
+			self.fireCompletions()
+		}
 	}
 
 	private func finalize() {

@@ -18,17 +18,21 @@ class ViewController: UIViewController {
 	
 	override func viewDidAppear(_ animated: Bool) {
 		super.viewDidAppear(animated)
-
+		
+	//	self.testAnimations()
+	}
+	
+	func testAnimations() {
 		let view = UIView(frame: CGRect(x: 0, y: 0, width: 35, height: 35))
 
 		if !self.presented {
 			self.presented = true
-			self.navigationController!.push(TestController1()).then(on: .main) {
-				self.navigationController!.pop()
+			self.navigationController!.pushController(TestController1()).then(on: .main) {
+				self.navigationController!.popController()
 			}.then(on: .main) {
-				self.present(TestController2())
+				self.presentController(TestController2())
 			}.then(on: .main) {
-				self.dismiss()
+				self.dismissController()
 				}.then(on: .main, { (Void) -> Promise<Bool> in
 				view.backgroundColor = UIColor.green
 				self.view.addSubview(view)
