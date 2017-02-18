@@ -33,7 +33,7 @@ public final class Promise<Value>: CustomStringConvertible {
 		self.init(serializer: serializer)
 		queue.async {
 			do {
-				try work(self.fulfill, self.reject)
+				try work(self.fulfill, { error in self.reject(error) })
 			} catch let error {
 				self.reject(error)
 			}
@@ -89,7 +89,7 @@ public final class Promise<Value>: CustomStringConvertible {
 		return self.then(on: queue, { _ in }, { _ in }, onCancelled)
 	}
 	
-	public func reject(_ error: Error) { self.updateState(.rejected(error: error)) }
+	@discardableResult public func reject(_ error: Error) -> Promise<Value> { self.updateState(.rejected(error: error)); return self }
 	public func fulfill(_ value: Value) { self.updateState(.fulfilled(value: value)) }
 	
 	public var isPending: Bool {
