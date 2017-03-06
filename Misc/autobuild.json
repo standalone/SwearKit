@@ -1,0 +1,12 @@
+{
+  "disabled" : false,
+  "name" : "SwearKit",
+  "working-directory" : "..\/",
+  "mac-output" : [
+    "..\/Mac Framework\/SwearKit.framework"
+  ],
+  "scriptpath" : "..\/Src\/BuildFramework.sh",
+  "ios-output" : [
+    "..\/iOS Framework\/SwearKit.framework"
+  ]
+}
