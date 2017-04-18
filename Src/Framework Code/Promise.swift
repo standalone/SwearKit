@@ -10,6 +10,41 @@ import Foundation
 
 public typealias EmptyPromise = Promise<Void>
 
+public final class PromiseChain<Value> {
+	public enum ChainError: Error { case exhausted }
+	
+	var promises: [() -> Promise<Value>]
+	var index = 0
+	let completion = Promise<Value>()
+	var lastError: Error?
+	
+	public init(_ promises: [() -> Promise<Value>] = []) {
+		self.promises = promises
+	}
+	
+	public func add(promise: @escaping () -> Promise<Value>) {
+		self.promises.append(promise)
+	}
+	
+	@discardableResult public func run() -> Promise<Value> {
+		if self.index >= self.promises.count {
+			self.completion.reject(self.lastError ?? ChainError.exhausted)
+			return self.completion
+		}
+		
+		self.promises[self.index]().then { success in
+			self.completion.fulfill(success)
+		}.catch { error in
+			self.lastError = error
+			self.index += 1
+			self.run()
+		}
+		
+		return self.completion
+	}
+	
+}
+
 public final class Promise<Value>: CustomStringConvertible {
 	private var state: State<Value> = .pending
 	internal let serializer: DispatchQueue
