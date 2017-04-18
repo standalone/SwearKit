@@ -70,6 +70,40 @@ class SwearKit_Tests: XCTestCase {
 		}
 	}
 	
+	func testChain() {
+		let expect = self.expectation(description: "chained promise")
+		let chain = PromiseChain<Int>()
+		
+		for i in 0...10 {
+			chain.add() {
+				let promise = Promise<Int>()
+				
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+					if i == 5 {
+						promise.fulfill(i)
+					} else {
+						promise.reject(NSError(domain: "", code: 1, userInfo: nil))
+					}
+				}
+				
+				return promise
+			}
+		}
+		
+		chain.run().then { success in
+			expect.fulfill()
+		}.catch { error in
+			XCTAssert(false, "Chain should have succeeded")
+		}
+
+		waitForExpectations(timeout: 5.0) { error in
+			if let error = error {
+				print("chain failed, \(error)")
+			}
+		}
+	}
+
+	
 	func fulfilledPromise() -> Promise<String> {
 		let promise = Promise<String>()
 		
