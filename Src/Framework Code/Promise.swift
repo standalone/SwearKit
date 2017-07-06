@@ -8,7 +8,11 @@
 
 import Foundation
 
-public typealias EmptyPromise = Promise<Void>
+public typealias Empty = Int
+public typealias EmptyPromise = Promise<Empty>
+
+
+let NoValue = 0
 
 public final class PromiseChain<Value> {
 	public enum ChainError: Error { case exhausted }
@@ -256,7 +260,7 @@ internal enum State<Value> { case pending, fulfilled(value: Value), rejected(err
 
 
 extension DispatchQueue {
-	static var promiseQueue: DispatchQueue { return DispatchQueue.global(qos: .userInitiated) }
+	public static var promiseQueue: DispatchQueue { return DispatchQueue.global(qos: .userInitiated) }
 }
 
 

@@ -13,7 +13,7 @@ extension Promise {
 		let promise = EmptyPromise()
 		
 		DispatchQueue.main.asyncAfter(deadline: .now() + interval) { 
-			promise.fulfill()
+			promise.fulfill(NoValue)
 		}
 
 		return promise
@@ -24,7 +24,7 @@ extension Promise {
 
 		self.addCompletions(on: .main, onFulfilled: { _ in
 			DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
-				promise.fulfill()
+				promise.fulfill(NoValue)
 			}
 		}, onRejected: { error in  }, onCancelled: { error in  })
 		

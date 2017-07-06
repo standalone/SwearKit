@@ -27,13 +27,13 @@ class ViewController: UIViewController {
 
 		if !self.presented {
 			self.presented = true
-			self.navigationController!.pushController(TestController1()).then(on: .main) {
+			self.navigationController!.pushController(TestController1()).then(on: .main) {_ in
 				self.navigationController!.popController()
-			}.then(on: .main) {
+			}.then(on: .main) { _ in
 				self.presentController(TestController2())
-			}.then(on: .main) {
+			}.then(on: .main) { _ in
 				self.dismissController()
-				}.then(on: .main, { (Void) -> Promise<Bool> in
+			}.then(on: .main, { (Void) -> Promise<Bool> in
 				view.backgroundColor = UIColor.green
 				self.view.addSubview(view)
 				

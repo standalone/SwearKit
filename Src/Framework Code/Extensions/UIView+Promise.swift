@@ -26,7 +26,7 @@ extension UIView {
 		
 		self.removeFromSuperview()
 		
-		promise.fulfill()
+		promise.fulfill(0)
 		return promise
 	}
 }

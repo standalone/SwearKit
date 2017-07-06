@@ -377,16 +377,18 @@
 					B504E6121A89230F001B414B = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = YY6CWUX533;
+						LastSwiftMigration = 0900;
 					};
 					B504E6451A8968DC001B414B = {
 						CreatedOnToolsVersion = 6.1.1;
-						LastSwiftMigration = 0810;
+						LastSwiftMigration = 0900;
 					};
 					B504E6661A89690C001B414B = {
 						CreatedOnToolsVersion = 6.1.1;
 					};
 					B504E6971A896E82001B414B = {
 						CreatedOnToolsVersion = 6.1.1;
+						LastSwiftMigration = 0900;
 					};
 					B504E6AE1A898110001B414B = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -666,6 +668,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.standalone.swearkit-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -681,6 +684,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.standalone.swearkit-tests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -708,7 +712,7 @@
 				PRODUCT_NAME = SwearKit;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0.1;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -734,7 +738,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.standalone.swearkit-framework";
 				PRODUCT_NAME = SwearKit;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0.1;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -766,6 +770,8 @@
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwearKitTest.app/SwearKitTest";
 			};
 			name = Debug;
@@ -777,6 +783,8 @@
 				INFOPLIST_FILE = Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
+				SWIFT_VERSION = 4.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SwearKitTest.app/SwearKitTest";
 			};
 			name = Release;
@@ -806,7 +814,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0.1;
+				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -833,7 +841,7 @@
 				PRODUCT_NAME = SwearKit;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0.1;
+				SWIFT_VERSION = 4.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};

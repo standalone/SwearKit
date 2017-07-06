@@ -20,7 +20,7 @@ extension UINavigationController {
 		
 		self.popViewController(animated: animated)
 		DispatchQueue.main.asyncAfter(deadline: .now() + UINavigationController.popDuration) {
-			promise.fulfill()
+			promise.fulfill(NoValue)
 		}
 		
 		return promise
@@ -31,7 +31,7 @@ extension UINavigationController {
 		
 		self.pushViewController(viewController, animated: animated)
 		DispatchQueue.main.asyncAfter(deadline: .now() + UINavigationController.pushDuration) {
-			promise.fulfill()
+			promise.fulfill(NoValue)
 		}
 		
 		return promise
@@ -43,7 +43,7 @@ extension UIViewController {
 		let promise = EmptyPromise()
 
 		self.present(viewController, animated: animated) {
-			promise.fulfill()
+			promise.fulfill(NoValue)
 		}
 
 		return promise
@@ -53,7 +53,7 @@ extension UIViewController {
 		let promise = EmptyPromise()
 		
 		self.dismiss(animated: animated) {
-			promise.fulfill()
+			promise.fulfill(NoValue)
 		}
 		
 		return promise
