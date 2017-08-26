@@ -26,22 +26,39 @@ public final class PromiseChain<Value> {
 		self.promises = promises
 	}
 	
-	public func add(promise: @escaping () -> Promise<Value>) {
+	public init(_ promise: Promise<Value>) {
+		self.promises = [{ return promise }]
+	}
+	
+	public func add(_ promise: @escaping () -> Promise<Value>) {
 		self.promises.append(promise)
 	}
 	
+	public func add(_ promise: Promise<Value>) {
+		self.promises.append({ return promise })
+	}
+	
 	@discardableResult public func run() -> Promise<Value> {
+		return self.next()
+	}
+	
+	@discardableResult func next(result: Value? = nil) -> Promise<Value> {
 		if self.index >= self.promises.count {
-			self.completion.reject(self.lastError ?? ChainError.exhausted)
+			if let result = result {
+				self.completion.fulfill(result)
+			} else {
+				self.completion.reject(self.lastError ?? ChainError.exhausted)
+			}
 			return self.completion
 		}
 		
 		self.promises[self.index]().then { success in
-			self.completion.fulfill(success)
+			self.index += 1
+			self.next(result: success)
 		}.catch { error in
 			self.lastError = error
 			self.index += 1
-			self.run()
+			self.next()
 		}
 		
 		return self.completion
