@@ -21,6 +21,18 @@ public final class PromiseChain<Value> {
 	var index = 0
 	let completion = Promise<Value>()
 	var lastError: Error?
+	let queue = DispatchQueue(label: "SwearKit-PromiseChainQueue")
+	var completed = false
+	var runInParallel = false
+	
+	func complete(with result: Value) {
+		self.queue.async {
+			if self.completed { return }
+			
+			self.completed = true
+			self.completion.fulfill(result)
+		}
+	}
 	
 	public init(_ promises: [() -> Promise<Value>] = []) {
 		self.promises = promises
@@ -38,31 +50,55 @@ public final class PromiseChain<Value> {
 		self.promises.append({ return promise })
 	}
 	
-	@discardableResult public func run() -> Promise<Value> {
-		return self.next()
-	}
-	
-	@discardableResult func next(result: Value? = nil) -> Promise<Value> {
-		if self.index >= self.promises.count {
-			if let result = result {
-				self.completion.fulfill(result)
-			} else {
-				self.completion.reject(self.lastError ?? ChainError.exhausted)
+	@discardableResult public func run(inParallel: Bool = false) -> Promise<Value> {
+		if inParallel {
+			for promise in self.promises {
+				promise().then { result in
+					self.complete(with: result)
+				}
 			}
-			return self.completion
-		}
-		
-		self.promises[self.index]().then { success in
-			self.index += 1
-			self.next(result: success)
-		}.catch { error in
-			self.lastError = error
-			self.index += 1
+		} else {
 			self.next()
 		}
-		
 		return self.completion
 	}
+	
+	func next() {
+		if self.index >= self.promises.count {
+			self.completion.reject(self.lastError!)
+			return
+		}
+		
+		self.promises[self.index]().then { result in
+			self.complete(with: result)
+		}.catch { error in
+			self.lastError = error
+			self.next()
+		}
+		self.index += 1
+	}
+	
+//	@discardableResult func next(result: Value? = nil) -> Promise<Value> {
+//		if self.index >= self.promises.count {
+//			if let result = result {
+//				self.completion.fulfill(result)
+//			} else {
+//				self.completion.reject(self.lastError ?? ChainError.exhausted)
+//			}
+//			return self.completion
+//		}
+//
+//		self.promises[self.index]().then { success in
+//			self.index += 1
+//			self.next(result: success)
+//		}.catch { error in
+//			self.lastError = error
+//			self.index += 1
+//			self.next()
+//		}
+//
+//		return self.completion
+//	}
 	
 }
 
