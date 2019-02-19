@@ -45,7 +45,7 @@ class SwearKit_Tests: XCTestCase {
 				expect.fulfill()
 		}
 		
-		waitForExpectations(timeout: 1.0) { error in
+		waitForExpectations(timeout: 3.0) { error in
 			if let error = error {
 				print("not rejected, \(error)")
 			}
@@ -69,10 +69,19 @@ class SwearKit_Tests: XCTestCase {
 			}
 		}
 	}
-	
-	func testChain() {
+
+	func testChainParallel() {
+		self.chain(parallel: true)
+	}
+
+	func testChainSerial() {
+		self.chain(parallel: false)
+	}
+
+	func chain(parallel: Bool) {
 		let expect = self.expectation(description: "chained promise")
 		let chain = PromiseChain<Int>()
+		let timeOut = parallel ? 2.0 : 5
 		
 		for i in 0...10 {
 			chain.add() {
@@ -90,13 +99,14 @@ class SwearKit_Tests: XCTestCase {
 			}
 		}
 		
-		chain.run().then { success in
+		chain.run(inParallel: parallel).then { success in
+			print("Success: \(success)")
 			expect.fulfill()
 		}.catch { error in
 			XCTAssert(false, "Chain should have succeeded")
 		}
 
-		waitForExpectations(timeout: 5.0) { error in
+		waitForExpectations(timeout: timeOut) { error in
 			if let error = error {
 				print("chain failed, \(error)")
 			}

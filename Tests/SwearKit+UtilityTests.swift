@@ -16,7 +16,7 @@ class SwearKit_Utility_Tests: XCTestCase {
 		let interval: TimeInterval = 0.5
 		let expect = expectation(description: "delayed")
 		
-		EmptyPromise.delayed(by: interval).then {
+		EmptyPromise.delayed(by: interval).then { _ in
 			XCTAssert(Date().timeIntervalSince(now) >= interval, "Didn't wait long enough")
 			expect.fulfill()
 		}
@@ -31,7 +31,7 @@ class SwearKit_Utility_Tests: XCTestCase {
 		let interval: TimeInterval = 0.5
 		let expect = expectation(description: "delayed")
 		
-		EmptyPromise.delayed(by: interval).delay(by: interval * 2).then {
+		EmptyPromise.delayed(by: interval).delay(by: interval * 2).then { _ in
 			let actual = Date().timeIntervalSince(now)
 			XCTAssert(actual >= interval * 3, "Didn't wait long enough (waited \(actual) sec")
 			expect.fulfill()

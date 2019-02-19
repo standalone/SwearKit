@@ -14,26 +14,27 @@ public typealias EmptyPromise = Promise<Empty>
 
 let NoValue = 0
 
-public final class PromiseChain<Value> {
+public class PromiseChain<Value> {
 	public enum ChainError: Error { case exhausted }
 	
 	var promises: [() -> Promise<Value>]
 	var index = 0
-	let completion = Promise<Value>()
+	let completion = Promise<[Value]>()
 	var lastError: Error?
 	let queue = DispatchQueue(label: "SwearKit-PromiseChainQueue")
 	var completed = false
 	var runInParallel = false
+	var results: [Value] = []
 	
-	func complete(with result: Value) {
+	func complete(with result: [Value]) {
 		self.queue.async {
 			if self.completed { return }
-			
+
 			self.completed = true
 			self.completion.fulfill(result)
 		}
 	}
-	
+
 	public init(_ promises: [() -> Promise<Value>] = []) {
 		self.promises = promises
 	}
@@ -50,31 +51,43 @@ public final class PromiseChain<Value> {
 		self.promises.append({ return promise })
 	}
 	
-	@discardableResult public func run(inParallel: Bool = false) -> Promise<Value> {
+	@discardableResult public func run(inParallel: Bool = false) -> Promise<[Value]> {
 		if inParallel {
+			let queue = DispatchQueue(label: "chainqueue")
+			queue.suspend()
 			for promise in self.promises {
+				queue.suspend()
 				promise().then { result in
-					self.complete(with: result)
+					self.results.append(result)
+					queue.resume()
 				}
 			}
+			self.complete(with: self.results)
+			queue.resume()
 		} else {
 			self.next()
 		}
 		return self.completion
 	}
-	
+
 	func next() {
 		if self.index >= self.promises.count {
-			self.completion.reject(self.lastError!)
+			if self.results.count > 0 {
+				self.complete(with: self.results)
+			} else {
+				self.completion.reject(self.lastError!)
+			}
 			return
 		}
 		
 		self.promises[self.index]().then { result in
-			self.complete(with: result)
+			self.results.append(result)
+			self.next()
 		}.catch { error in
 			self.lastError = error
 			self.next()
 		}
+
 		self.index += 1
 	}
 	
@@ -246,22 +259,25 @@ public final class Promise<Value>: CustomStringConvertible {
 		self.serializer.async {
 			guard !self.state.isPending && !self.completionsCalled else { return }
 			self.completionsCalled = true
-			self.completions.forEach { completion in
-				switch self.state {
-				case let .fulfilled(value):
-					completion.fulfill(value)
-				case let .rejected(error):
-					if let cancelError = error as? PromiseCancelledError {
-						completion.cancel(cancelError)
-					} else {
-						completion.reject(error)
+			defer { self.finalize() }
+			if !self.completions.isEmpty {
+				let completions = self.completions
+				self.completions.removeAll()
+				completions.forEach { completion in
+					switch self.state {
+					case let .fulfilled(value):
+						completion.fulfill(value)
+					case let .rejected(error):
+						if let cancelError = error as? PromiseCancelledError {
+							completion.cancel(cancelError)
+						} else {
+							completion.reject(error)
+						}
+					default:
+						break
 					}
-				default:
-					break
 				}
 			}
-			self.completions.removeAll()
-			self.finalize()
 		}
 	}
 	
