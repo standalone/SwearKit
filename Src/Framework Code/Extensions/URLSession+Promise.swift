@@ -9,9 +9,9 @@
 import Foundation
 
 public extension URLSession {
-	public enum DownloadError: Error { case noData }
+	enum DownloadError: Error { case noData }
 	
-	public func get(queue: DispatchQueue = .main, url: URL) -> Promise<Data> {
+	func get(queue: DispatchQueue = .main, url: URL) -> Promise<Data> {
 		let promise = Promise<Data>()
 		
 		let task = self.dataTask(with: url) { data, response, error in
@@ -28,7 +28,7 @@ public extension URLSession {
 		return promise
 	}
 	
-	public func getWithRequest(queue: DispatchQueue = .main, url: URL) -> Promise<(URLResponse, Data)> {
+	func getWithRequest(queue: DispatchQueue = .main, url: URL) -> Promise<(URLResponse, Data)> {
 		let promise = Promise<(URLResponse, Data)>()
 		
 		let task = self.dataTask(with: url) { data, response, error in

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 extension UIView {
-	public class func animate(duration: TimeInterval, usingSpringWithDamping dampingRatio: CGFloat = 1.0, initialSpringVelocity velocity: CGFloat = 0.0, options: UIViewAnimationOptions = [], animations: @escaping () -> Void) -> Promise<Bool> {
+	public class func animate(duration: TimeInterval, usingSpringWithDamping dampingRatio: CGFloat = 1.0, initialSpringVelocity velocity: CGFloat = 0.0, options: UIView.AnimationOptions = [], animations: @escaping () -> Void) -> Promise<Bool> {
 		let promise = Promise<Bool>()
 		
 		UIView.animate(withDuration: duration, delay: 0, usingSpringWithDamping: dampingRatio, initialSpringVelocity: velocity, options: options, animations: animations) { complete in
