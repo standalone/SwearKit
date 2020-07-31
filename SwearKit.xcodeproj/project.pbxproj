@@ -95,6 +95,7 @@
 		B504E69C1A896E82001B414B /* SwearKit_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwearKit_Tests.swift; sourceTree = "<group>"; };
 		B504E6AF1A898110001B414B /* SwearKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwearKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B54473241DD237C000590803 /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Promise.swift; path = "Src/Framework Code/Promise.swift"; sourceTree = "<group>"; };
+		B554F3DA24D42F7900277AD7 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		B57AEF431C59C1AE007611F0 /* sample_image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sample_image.png; sourceTree = "<group>"; };
 		B58D64881A899094005A0002 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B58D648A1A899094005A0002 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -155,8 +156,8 @@
 			isa = PBXGroup;
 			children = (
 				B504E66A1A896980001B414B /* BuildFramework.sh */,
-				B5EA1ADD1DD30732000E61F7 /* Promises */,
-				B5EA1AD91DD3072B000E61F7 /* Extensions */,
+				B554F3DA24D42F7900277AD7 /* Package.swift */,
+				B554F3D824D42F5B00277AD7 /* Sources */,
 				B5BF7D881DCCB1C7009253D4 /* Mac */,
 				B5BF7D811DCCB1AA009253D4 /* iOS */,
 				B58D64741A898F81005A0002 /* Framework Code */,
@@ -195,6 +196,23 @@
 				B504E69B1A896E82001B414B /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B554F3D824D42F5B00277AD7 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				B554F3D924D42F6600277AD7 /* SwearKit */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		B554F3D924D42F6600277AD7 /* SwearKit */ = {
+			isa = PBXGroup;
+			children = (
+				B5EA1ADD1DD30732000E61F7 /* Promises */,
+				B5EA1AD91DD3072B000E61F7 /* Extensions */,
+			);
+			path = SwearKit;
 			sourceTree = "<group>";
 		};
 		B560B5241AA4A15000F3161F /* ObjC */ = {
@@ -257,8 +275,7 @@
 				B5EA1ADA1DD3072B000E61F7 /* URLSession+Promise.swift */,
 				B5D5EC4C1DDF1A85007A4145 /* Utility+Promises.swift */,
 			);
-			name = Extensions;
-			path = "Src/Framework Code/Extensions";
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		B5EA1ADD1DD30732000E61F7 /* Promises */ = {
@@ -268,6 +285,7 @@
 				B5EA1AD41DD2FEBB000E61F7 /* Promise+Cancel.swift */,
 			);
 			name = Promises;
+			path = ../..;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
